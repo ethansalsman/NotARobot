@@ -14,6 +14,7 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.notarobot.ui.theme.NotARobotTheme
 
@@ -63,10 +64,16 @@ fun NotARobot() {
 }
 
 
-@Preview(showBackground = true)
+
 @Composable
-fun GreetingPreview() {
-    NotARobotTheme {
-        Greeting("Android")
+fun CatDogImage(animal: Animal,OnClick: (Animal) -> (Unit) {
+    Image(
+        painter = painterResource(id = animal.imageRes),
+        contentDescription = if (animal.isCat) "Cat" else "Dog",
+        Modifier = Modifier
+            .size(120.dp)
+            .padding(8.dp)
+            .clip(shape = MaterialTheme.shapes.medium)
+            .clickable { onClick(animal) }
+    )
     }
-}
