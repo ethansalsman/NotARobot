@@ -4,12 +4,15 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.notarobot.ui.theme.NotARobotTheme
@@ -18,23 +21,46 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            NotARobotTheme {
-                // A surface container using the 'background' color from the them
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
-                ) {
+            NotARobot()
 
                 }
             }
         }
-    }
-}
+
+
 data class Animal(val imageRes: Int, val isCat: Boolean)
 @Composable
 fun NotARobot() {
     val animals = remember { generateAnimalList }
     var feedbackMessage by remember { mutableStateOf<String?>(null) }
+
+
+    Scaffold(
+        content = {
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(16.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                items(animal) { animal ->
+                    CatDogImage(animal) { clickedAnimal ->
+                        feedbackMessage = if (clickedAnimal.isCat) {
+                            "Hurray, you are not a robot!"
+                        } else {
+                            "Oops, that is not a cat!"
+                        }
+                    }
+                }
+            }
+            feedbackMessage?.let {
+                FeedbackMessage(message = it) {
+                    feedbackMessage = null
+                }
+            }
+        }
+    )
+}
 
 
 @Preview(showBackground = true)
