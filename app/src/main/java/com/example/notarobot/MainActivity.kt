@@ -36,21 +36,36 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun NotARobot(darkTheme: Boolean) {
-    LazyColumn(
+    Column(
         modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
+        verticalArrangement = Arrangement.Top
     ) {
-        items(generateAnimalList()) { animal ->
-            AnimalItem(animal)
+        // header for finding the cat
+        Text(
+            text = "Find The Cat!",
+            style = MaterialTheme.typography.headlineMedium,
+            modifier = Modifier.padding(16.dp)
+        )
+        // lazy column for displaying images
+        LazyColumn(
+            modifier = Modifier.fillMaxSize(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
+            items(generateAnimalList()) { animal ->
+                AnimalItem(animal)
+            }
         }
     }
 }
+
 
 @Composable
 fun AnimalItem(animal: Animal) {
     val context = LocalContext.current
     Column(
+        // center and house the click event which will display message to user
         modifier = Modifier
             .padding(8.dp)
             .clickable { HandleAnimalClick(animal, context) }
@@ -67,6 +82,7 @@ fun AnimalItem(animal: Animal) {
 
 fun HandleAnimalClick(animal: Animal, context: Context) {
     val message = if (animal.isCat) {
+        // hold messages for when the user clicks
         "Hurray, you are not a robot!"
     } else {
         "Oops, that is not a cat!"
@@ -81,11 +97,12 @@ data class Animal(val imageRes: Int, val isCat: Boolean)
 
 
 fun generateAnimalList(): List<Animal> {
+    // assign index numbers to each images to help display them
     val catImages = (1..3).map { resourceIdForCat(it) }
     val dogImages = (1..6).map { resourceIdForDog(it) }
 
     val animals = mutableListOf<Animal>()
-
+    // assign random index
     repeat(5) {
         val randomIndex = if (it == 0) 0 else (1..6).random()
         val isCat = it == 0
@@ -95,7 +112,7 @@ fun generateAnimalList(): List<Animal> {
 
     return animals
 }
-
+// index for cats
 fun resourceIdForCat(index: Int): Int {
     return when (index) {
         1 -> R.drawable.cat1
@@ -104,7 +121,7 @@ fun resourceIdForCat(index: Int): Int {
         else -> throw IllegalArgumentException("Invalid cat index: $index")
     }
 }
-
+// index for dogs
 fun resourceIdForDog(index: Int): Int {
     return when (index) {
         1 -> R.drawable.dog1
