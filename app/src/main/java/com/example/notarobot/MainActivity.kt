@@ -49,10 +49,11 @@ fun NotARobot(darkTheme: Boolean) {
 
 @Composable
 fun AnimalItem(animal: Animal) {
+    val context = LocalContext.current
     Column(
         modifier = Modifier
             .padding(8.dp)
-            .clickable { HandleAnimalClick(animal, LocalContext.current) }
+            .clickable { HandleAnimalClick(animal, context) }
     ) {
         Image(
             painter = painterResource(id = animal.imageRes),
@@ -75,11 +76,13 @@ fun HandleAnimalClick(animal: Animal, context: Context) {
 }
 
 
-data class Animal(val imageRes: Unit, val isCat: Boolean)
+
+data class Animal(val imageRes: Int, val isCat: Boolean)
+
 
 fun generateAnimalList(): List<Animal> {
-    val catImages = (1..3).map { R.drawable.cat$it }
-    val dogImages = (1..6).map { R.drawable.dog$it }
+    val catImages = (1..3).map { resourceIdForCat(it) }
+    val dogImages = (1..6).map { resourceIdForDog(it) }
 
     val animals = mutableListOf<Animal>()
 
@@ -91,6 +94,27 @@ fun generateAnimalList(): List<Animal> {
     }
 
     return animals
+}
+
+fun resourceIdForCat(index: Int): Int {
+    return when (index) {
+        1 -> R.drawable.cat1
+        2 -> R.drawable.cat2
+        3 -> R.drawable.cat3
+        else -> throw IllegalArgumentException("Invalid cat index: $index")
+    }
+}
+
+fun resourceIdForDog(index: Int): Int {
+    return when (index) {
+        1 -> R.drawable.dog1
+        2 -> R.drawable.dog2
+        3 -> R.drawable.dog3
+        4 -> R.drawable.dog4
+        5 -> R.drawable.dog5
+        6 -> R.drawable.dog6
+        else -> throw IllegalArgumentException("Invalid dog index: $index")
+    }
 }
 
 
