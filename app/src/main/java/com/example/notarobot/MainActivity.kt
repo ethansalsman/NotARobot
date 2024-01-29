@@ -7,13 +7,16 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Snackbar
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.ComposableTargetMarker
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.notarobot.ui.theme.NotARobotTheme
 
@@ -63,10 +66,34 @@ fun NotARobot() {
 }
 
 
-@Preview(showBackground = true)
+
 @Composable
-fun GreetingPreview() {
-    NotARobotTheme {
-        Greeting("Android")
+fun CatDogImage(animal: Animal,OnClick: (Animal) -> (Unit) {
+    Image(
+        painter = painterResource(id = animal.imageRes),
+        contentDescription = if (animal.isCat) "Cat" else "Dog",
+        Modifier = Modifier
+            .size(120.dp)
+            .padding(8.dp)
+            .clip(shape = MaterialTheme.shapes.medium)
+            .clickable { onClick(animal) }
+    )
+    }
+@Composable
+fun FeedbackMessage(message: String, onDismiss: () -> Unit) {
+    Snackbar(
+        modifier = Modifier
+            .padding(16.dp)
+            .align(Alignment.BottomCenter),
+        backgroundColor = MaterialTheme.colorScheme.primary,
+        contentColor = MaterialTheme.colorScheme.onPrimary
+    ) {
+        Text(message, modifier = Modifier.padding(8.dp))
+        IconButton(
+            onClick = onDismiss,
+            modifier = Modifier.align(Alignment.CenterVertically)
+        ) {
+            Icon(imageVector = Icons.Default.Close, contentDescription = "Dismiss")
+        }
     }
 }
